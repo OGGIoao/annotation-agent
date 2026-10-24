@@ -172,6 +172,8 @@ flowchart TB
 
 最终流程图集见：[ARCHITECTURE-FLOWS.md](docs/ARCHITECTURE-FLOWS.md)。
 
+手机查看版 Word 文档见：[ARCHITECTURE-DESIGN.docx](docs/ARCHITECTURE-DESIGN.docx)。
+
 ### 阶段 0：业务和数据基线
 
 - 固定第一版数学题型；
