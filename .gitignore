@@ -1,0 +1,31 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Test and tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local runtime data
+artifacts/
+sample-data/raw-pages/
+sample-data/answer-pages/
+sample-data/existing-labels/
+*.db
+*.sqlite
+.DS_Store
