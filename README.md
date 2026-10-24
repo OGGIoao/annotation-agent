@@ -172,6 +172,10 @@ flowchart TB
 
 参考架构对比见：[参考架构对比与升级建议](docs/ARCHITECTURE-COMPARISON.md)。
 
+当前最终设计总图与详细说明见：[ARCHITECTURE-DESIGN.md](docs/ARCHITECTURE-DESIGN.md)。
+
+简版架构图见：[ARCHITECTURE-DIAGRAM.md](docs/ARCHITECTURE-DIAGRAM.md)。
+
 ### 阶段 0：业务和数据基线
 
 - 固定第一版数学题型；
