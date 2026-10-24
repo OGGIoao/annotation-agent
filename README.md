@@ -166,15 +166,11 @@ flowchart TB
 - 平台适配器独立于内部领域模型；
 - 生产提交必须在测试任务验证后再考虑。
 
-## 开发路线
+## 设计说明
 
-详细路线见：[开发路线与协作约定](docs/DEVELOPMENT-ROADMAP.md)。
+最终系统架构图与设计说明见：[ARCHITECTURE-DESIGN.md](docs/ARCHITECTURE-DESIGN.md)。
 
-参考架构对比见：[参考架构对比与升级建议](docs/ARCHITECTURE-COMPARISON.md)。
-
-当前最终设计总图与详细说明见：[ARCHITECTURE-DESIGN.md](docs/ARCHITECTURE-DESIGN.md)。
-
-参考图风格的流程图见：[ARCHITECTURE-FLOW.md](docs/ARCHITECTURE-FLOW.md)。
+参考图风格的最终流程图见：[ARCHITECTURE-FLOW.md](docs/ARCHITECTURE-FLOW.md)。
 
 ### 阶段 0：业务和数据基线
 
@@ -312,10 +308,11 @@ gold-data/
 
 ### 新协作者先读什么
 
-1. 本 README：了解目标、范围和当前状态；
-2. `docs/DEVELOPMENT-ROADMAP.md`：了解阶段路线和验收标准；
-3. `AGENTS.md`：了解仓库边界和开发约束；
-4. 具体任务对应的规则和测试案例。
+1. 本 README：了解目标、范围、最终架构和当前状态；
+2. `docs/ARCHITECTURE-DESIGN.md`：了解系统设计说明；
+3. `docs/ARCHITECTURE-FLOW.md`：了解最终业务流程图；
+4. `AGENTS.md`：了解仓库边界和开发约束；
+5. 具体任务对应的规则和测试案例。
 
 ### 开发原则
 
