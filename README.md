@@ -170,6 +170,8 @@ flowchart TB
 
 详细路线见：[开发路线与协作约定](docs/DEVELOPMENT-ROADMAP.md)。
 
+参考架构对比见：[参考架构对比与升级建议](docs/ARCHITECTURE-COMPARISON.md)。
+
 ### 阶段 0：业务和数据基线
 
 - 固定第一版数学题型；
