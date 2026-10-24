@@ -174,7 +174,7 @@ flowchart TB
 
 当前最终设计总图与详细说明见：[ARCHITECTURE-DESIGN.md](docs/ARCHITECTURE-DESIGN.md)。
 
-简版架构图见：[ARCHITECTURE-DIAGRAM.md](docs/ARCHITECTURE-DIAGRAM.md)。
+参考图风格的流程图见：[ARCHITECTURE-FLOW.md](docs/ARCHITECTURE-FLOW.md)。
 
 ### 阶段 0：业务和数据基线
 
