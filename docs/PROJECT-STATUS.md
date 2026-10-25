@@ -43,18 +43,19 @@ The browser must not infer business rules or freely act from raw model output.
 - final architecture explanation and flow diagrams;
 - mobile-friendly Word design document;
 - one dependency smoke test;
-- first contract models in `app/contracts/models.py`: `BoundingBox` (positive area, finite non-negative coordinates), `QuestionNode`, `AnswerBox`, and enums for subject, question type, line type, answer mode, and closedness;
-- first deterministic validators in `app/rules/validators.py` with stable error codes:
-  - page bounds: `COORDINATE_OUT_OF_BOUNDS`;
+- first contract models in `app/contracts/models.py`: `Page` (positive finite size), `BoundingBox` (positive area, finite non-negative coordinates), `QuestionNode`, `AnswerBox`, `Issue` (code, severity, message, refs), `AnnotationResult`, and enums for subject, question type, line type, answer mode, closedness, severity, and result status;
+- `AnnotationResult` enforces that `status` matches its issues: any blocking issue requires `needs_review`, so a result never passes silently;
+- first deterministic validators in `app/rules/validators.py`; each returns the full list of issues instead of stopping at the first, and `validate_annotation()` runs them all and builds an `AnnotationResult`. Stable error codes:
+  - page bounds (checked against each page's own size): `DUPLICATE_PAGE_ID`, `PAGE_NOT_FOUND`, `COORDINATE_OUT_OF_BOUNDS`;
   - question hierarchy: `DUPLICATE_QUESTION_ID`, `PARENT_NOT_FOUND`, `PARENT_PAGE_MISMATCH`, `CHILD_OUTSIDE_PARENT`, `PARENT_CYCLE`;
   - answer bindings: `QUESTION_NOT_FOUND`, `DUPLICATE_ANSWER_ID`;
 - unit tests for the contracts and validators.
 
 ### Not yet implemented
 
-- remaining contracts: `TaskPackage`, `AnnotationResult`;
+- remaining contracts: `TaskPackage`, question relations (cross-column, cross-page, independent answers);
 - `RuleTrace`, `ActionPlan`, `ExecutionReceipt`, `ReviewRecord`;
-- validators that collect all issues instead of stopping at the first one (needed for `RuleTrace` and review reasons);
+- warning-level validators (the severity field exists, but every current check is blocking);
 - math rule files (`rules/math.yaml`) and rule cases under `tests/rule_cases/`;
 - redacted gold data;
 - OCR/PP-Structure adapter;
@@ -80,7 +81,7 @@ Do not expand to all subjects, listening, handwriting, complex drawing, QR extra
 
 ## Next development plan
 
-### Step 1 — Freeze the contract (in progress: box, question, and answer models done)
+### Step 1 — Freeze the contract (in progress: page, box, question, answer, issue, and result models done; relations and answer sources pending)
 
 Define Pydantic models and enums before adding model calls:
 
@@ -95,7 +96,7 @@ Define Pydantic models and enums before adding model calls:
 
 Deliverable: contract models plus invalid/valid fixture tests.
 
-### Step 2 — Build deterministic validators (in progress: bounds, hierarchy, and answer-binding checks done)
+### Step 2 — Build deterministic validators (in progress: bounds, hierarchy, and answer-binding checks done; issues are collected, not fail-fast)
 
 Implement checks for:
 
@@ -168,7 +169,7 @@ Every change must pass:
 ```bash
 uv run pytest
 uv run python -m compileall app tests
- git diff --check
+git diff --check
 ```
 
 Every model or rule change must also include a fixture or evaluation update. Every platform change must be tested against a fake or test environment before production use.

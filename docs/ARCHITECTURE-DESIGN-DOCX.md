@@ -1,6 +1,6 @@
 ## 手机查看版设计文档
 
-Word 文档下载：[ARCHITECTURE-DESIGN.docx](docs/ARCHITECTURE-DESIGN.docx)
+Word 文档下载：[ARCHITECTURE-DESIGN.docx](ARCHITECTURE-DESIGN.docx)
 
 文档包含：
 

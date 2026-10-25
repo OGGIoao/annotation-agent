@@ -4,8 +4,8 @@
 
 ```bash
 uv run pytest
-uv run python -m compileall app
- git diff --check
+uv run python -m compileall app tests
+git diff --check
 ```
 
 ## 提交规范
