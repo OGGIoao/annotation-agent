@@ -58,3 +58,9 @@ def test_question_node_accepts_multiple_types_for_compound_questions() -> None:
     )
 
     assert question.types == [QuestionType.READING, QuestionType.CHOICE]
+
+
+@pytest.mark.parametrize("value", [float("inf"), float("nan")])
+def test_bounding_box_rejects_non_finite_coordinates(value: float) -> None:
+    with pytest.raises(ValidationError):
+        BoundingBox(page_id="p001", x1=0, y1=0, x2=value, y2=120)

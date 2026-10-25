@@ -53,3 +53,32 @@ def test_answer_binding_rejects_unknown_question():
     )
     with pytest.raises(ValidationIssue, match="QUESTION_NOT_FOUND"):
         validate_answer_bindings([], [answer])
+
+
+def test_question_hierarchy_rejects_self_parent():
+    with pytest.raises(ValidationIssue, match="PARENT_CYCLE"):
+        validate_question_hierarchy([question("1", make_box(), parent_id="1")])
+
+
+def test_question_hierarchy_rejects_parent_cycle():
+    questions = [
+        question("1", make_box(), parent_id="2"),
+        question("2", make_box(), parent_id="1"),
+    ]
+    with pytest.raises(ValidationIssue, match="PARENT_CYCLE"):
+        validate_question_hierarchy(questions)
+
+
+def test_question_hierarchy_rejects_duplicate_question_id():
+    questions = [question("1", make_box()), question("1", make_box(x2=50))]
+    with pytest.raises(ValidationIssue, match="DUPLICATE_QUESTION_ID"):
+        validate_question_hierarchy(questions)
+
+
+def test_question_hierarchy_accepts_valid_nested_tree():
+    questions = [
+        question("1", make_box()),
+        question("1-1", make_box(x2=50), parent_id="1"),
+        question("1-1-1", make_box(x2=20), parent_id="1-1"),
+    ]
+    validate_question_hierarchy(questions)

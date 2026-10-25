@@ -23,8 +23,19 @@ def validate_page_bounds(
 
 
 def validate_question_hierarchy(questions: Iterable[QuestionNode]) -> None:
-    by_id = {question.id: question for question in questions}
+    by_id: dict[str, QuestionNode] = {}
+    for question in questions:
+        if question.id in by_id:
+            raise ValidationIssue(
+                "DUPLICATE_QUESTION_ID", f"question {question.id} repeats"
+            )
+        by_id[question.id] = question
+
     for question in by_id.values():
+        if question.parent_id == question.id:
+            raise ValidationIssue(
+                "PARENT_CYCLE", f"question {question.id} is its own parent"
+            )
         if question.parent_id is None:
             continue
         parent = by_id.get(question.parent_id)
@@ -43,6 +54,23 @@ def validate_question_hierarchy(questions: Iterable[QuestionNode]) -> None:
                 "CHILD_OUTSIDE_PARENT",
                 f"question {question.id} is outside parent {parent.id}",
             )
+
+    _reject_parent_cycles(by_id)
+
+
+def _reject_parent_cycles(by_id: dict[str, QuestionNode]) -> None:
+    # Every parent_id is known to exist here, so each chain ends at a root or loops.
+    for start in by_id.values():
+        seen = {start.id}
+        current = start
+        while current.parent_id is not None:
+            if current.parent_id in seen:
+                raise ValidationIssue(
+                    "PARENT_CYCLE",
+                    f"question {start.id} has a cyclic parent chain",
+                )
+            seen.add(current.parent_id)
+            current = by_id[current.parent_id]
 
 
 def validate_answer_bindings(

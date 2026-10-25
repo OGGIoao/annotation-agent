@@ -74,12 +74,15 @@
 - 基础目录骨架；
 - 数据和密钥忽略规则；
 - GitHub Actions 基础 CI；
-- 最终架构和流程图文档。
+- 最终架构和流程图文档；
+- 第一批数据契约（`app/contracts/models.py`）：`BoundingBox`、`QuestionNode`、`AnswerBox` 及学科、题型、虚线类型、答案模式、封闭性枚举；
+- 第一批确定性校验器（`app/rules/validators.py`）：页面边界、父子层级（父题存在、同页、包含、无环、题目 ID 不重复）、答案绑定（题目存在、答案 ID 不重复）。
 
 当前尚未完成：
 
-- 业务数据契约；
-- 数学规则校验器；
+- 其余数据契约：`TaskPackage`、`AnnotationResult`、`RuleTrace`、`ReviewRecord`、`ActionPlan`、`ExecutionReceipt`；
+- 数学规则文件 `rules/math.yaml` 和规则案例；
+- 脱敏金标准数据；
 - PaddleOCR/PP-StructureV3 接入；
 - 多模态模型适配器；
 - 结果可视化；
@@ -343,8 +346,8 @@ git diff --check
 
 1. 确定第一批数学样本；
 2. 定义脱敏金标准 JSON；
-3. 实现 `app/contracts/` 数据模型；
-4. 为坐标和关系校验写测试；
+3. 补齐 `AnnotationResult` 等剩余数据契约（基础框、题目、答案模型已完成）；
+4. 在 `tests/rule_cases/` 补充坐标和关系规则案例（基础校验器已有单元测试）；
 5. 创建第一版 `rules/math.yaml`；
 6. 用人工构造数据跑通校验器；
 7. 再接 OCR 和多模态模型。
