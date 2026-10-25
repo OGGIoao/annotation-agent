@@ -29,9 +29,13 @@ dependencies = [
     { name = "httpx" },
     { name = "langgraph" },
     { name = "pydantic" },
+    { name = "python-dotenv" },
+]
+
+[package.dev-dependencies]
+dev = [
     { name = "pytest" },
     { name = "python-docx" },
-    { name = "python-dotenv" },
 ]
 
 [package.metadata]
@@ -40,9 +44,13 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "langgraph", specifier = ">=1.2.17" },
     { name = "pydantic", specifier = ">=2.14.1" },
+    { name = "python-dotenv", specifier = ">=1.2.4" },
+]
+
+[package.metadata.requires-dev]
+dev = [
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "python-docx", specifier = ">=1.2.0" },
-    { name = "python-dotenv", specifier = ">=1.2.4" },
 ]
 
 [[package]]

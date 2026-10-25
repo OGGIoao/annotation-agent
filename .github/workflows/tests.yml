@@ -19,4 +19,4 @@ jobs:
       - name: Run tests
         run: uv run pytest
       - name: Check syntax
-        run: uv run python -m compileall app
+        run: uv run python -m compileall app tests

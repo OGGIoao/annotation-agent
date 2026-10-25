@@ -86,3 +86,55 @@ class AnswerBox(BaseModel):
         if self.mode is not AnswerMode.BLANK and self.bbox is None:
             raise ValueError("non-blank answer boxes require a bounding box")
         return self
+
+
+class Page(BaseModel):
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    id: str = Field(min_length=1)
+    width: float = Field(gt=0)
+    height: float = Field(gt=0)
+
+
+class Severity(StrEnum):
+    BLOCKING = "blocking"
+    WARNING = "warning"
+
+
+class Issue(BaseModel):
+    """A validation finding with a stable machine-readable code."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    code: str = Field(min_length=1)
+    severity: Severity = Severity.BLOCKING
+    message: str
+    refs: list[str] = Field(default_factory=list)
+
+
+class ResultStatus(StrEnum):
+    PASSED = "passed"
+    NEEDS_REVIEW = "needs_review"
+
+
+class AnnotationResult(BaseModel):
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    pages: list[Page] = Field(min_length=1)
+    questions: list[QuestionNode]
+    answers: list[AnswerBox] = Field(default_factory=list)
+    issues: list[Issue] = Field(default_factory=list)
+    status: ResultStatus
+    confidence: float | None = Field(default=None, ge=0, le=1)
+
+    @model_validator(mode="after")
+    def status_matches_issues(self) -> "AnnotationResult":
+        # A blocking issue must never be reported as a pass, and vice versa.
+        has_blocking = any(i.severity is Severity.BLOCKING for i in self.issues)
+        expected = ResultStatus.NEEDS_REVIEW if has_blocking else ResultStatus.PASSED
+        if self.status is not expected:
+            raise ValueError(
+                f"status must be {expected.value} when blocking issues "
+                f"{'exist' if has_blocking else 'are absent'}"
+            )
+        return self

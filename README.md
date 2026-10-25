@@ -75,12 +75,13 @@
 - 数据和密钥忽略规则；
 - GitHub Actions 基础 CI；
 - 最终架构和流程图文档；
-- 第一批数据契约（`app/contracts/models.py`）：`BoundingBox`、`QuestionNode`、`AnswerBox` 及学科、题型、虚线类型、答案模式、封闭性枚举；
-- 第一批确定性校验器（`app/rules/validators.py`）：页面边界、父子层级（父题存在、同页、包含、无环、题目 ID 不重复）、答案绑定（题目存在、答案 ID 不重复）。
+- 第一批数据契约（`app/contracts/models.py`）：`Page`、`BoundingBox`、`QuestionNode`、`AnswerBox`、`Issue`、`AnnotationResult` 及学科、题型、虚线类型、答案模式、封闭性、问题级别、结果状态枚举；
+- `AnnotationResult` 强制状态与问题一致：存在阻塞级问题时只能是 `needs_review`，不会静默通过；
+- 第一批确定性校验器（`app/rules/validators.py`）：每个校验器一次收集全部问题并返回问题列表，覆盖页面边界（按页尺寸、页面存在、页面 ID 不重复）、父子层级（父题存在、同页、包含、无环、题目 ID 不重复）、答案绑定（题目存在、答案 ID 不重复）；`validate_annotation()` 一次运行全部校验并生成 `AnnotationResult`。
 
 当前尚未完成：
 
-- 其余数据契约：`TaskPackage`、`AnnotationResult`、`RuleTrace`、`ReviewRecord`、`ActionPlan`、`ExecutionReceipt`；
+- 其余数据契约：`TaskPackage`、题目关系（跨栏、跨页、独立答案）、`RuleTrace`、`ReviewRecord`、`ActionPlan`、`ExecutionReceipt`；
 - 数学规则文件 `rules/math.yaml` 和规则案例；
 - 脱敏金标准数据；
 - PaddleOCR/PP-StructureV3 接入；
@@ -280,7 +281,7 @@ gold-data/
 
 1. 本 README：了解目标、范围、最终架构和当前状态；
 2. `docs/ARCHITECTURE-DESIGN.md`：了解系统设计说明；
-3. `docs/ARCHITECTURE-FLOW.md`：了解最终业务流程图；
+3. `docs/ARCHITECTURE-FLOWS.md`：了解最终业务流程图；
 4. `AGENTS.md`：了解仓库边界和开发约束；
 5. 具体任务对应的规则和测试案例。
 
@@ -346,8 +347,8 @@ git diff --check
 
 1. 确定第一批数学样本；
 2. 定义脱敏金标准 JSON；
-3. 补齐 `AnnotationResult` 等剩余数据契约（基础框、题目、答案模型已完成）；
-4. 在 `tests/rule_cases/` 补充坐标和关系规则案例（基础校验器已有单元测试）；
+3. 补充题目关系契约（跨栏、跨页、独立答案），并接入 `AnnotationResult`；
+4. 在 `tests/rule_cases/` 补充坐标和关系规则案例（现有校验器已有单元测试）；
 5. 创建第一版 `rules/math.yaml`；
 6. 用人工构造数据跑通校验器；
 7. 再接 OCR 和多模态模型。
