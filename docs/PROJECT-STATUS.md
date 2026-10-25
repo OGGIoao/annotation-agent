@@ -4,7 +4,7 @@
 
 ## Project status
 
-`annotation-agent` is an early-stage educational question annotation agent. The repository currently contains the project skeleton, final architecture documents, Python 3.12/uv setup, basic dependencies, a smoke test, and CI.
+`annotation-agent` is an early-stage educational question annotation agent. The repository currently contains the project skeleton, final architecture documents, Python 3.12/uv setup, basic dependencies, a smoke test, CI, and the first contract models and deterministic validators with unit tests.
 
 It is **not yet** an OCR system, a production browser robot, or a production auto-submission service.
 
@@ -42,14 +42,21 @@ The browser must not infer business rules or freely act from raw model output.
 - GitHub Actions for dependency installation, tests, and syntax checks;
 - final architecture explanation and flow diagrams;
 - mobile-friendly Word design document;
-- one dependency smoke test.
+- one dependency smoke test;
+- first contract models in `app/contracts/models.py`: `BoundingBox` (positive area, finite non-negative coordinates), `QuestionNode`, `AnswerBox`, and enums for subject, question type, line type, answer mode, and closedness;
+- first deterministic validators in `app/rules/validators.py` with stable error codes:
+  - page bounds: `COORDINATE_OUT_OF_BOUNDS`;
+  - question hierarchy: `DUPLICATE_QUESTION_ID`, `PARENT_NOT_FOUND`, `PARENT_PAGE_MISMATCH`, `CHILD_OUTSIDE_PARENT`, `PARENT_CYCLE`;
+  - answer bindings: `QUESTION_NOT_FOUND`, `DUPLICATE_ANSWER_ID`;
+- unit tests for the contracts and validators.
 
 ### Not yet implemented
 
-- annotation domain contracts;
-- `TaskPackage`, `QuestionNode`, `AnswerBox`, `AnnotationResult`;
+- remaining contracts: `TaskPackage`, `AnnotationResult`;
 - `RuleTrace`, `ActionPlan`, `ExecutionReceipt`, `ReviewRecord`;
-- math rule files and deterministic validators;
+- validators that collect all issues instead of stopping at the first one (needed for `RuleTrace` and review reasons);
+- math rule files (`rules/math.yaml`) and rule cases under `tests/rule_cases/`;
+- redacted gold data;
 - OCR/PP-Structure adapter;
 - multimodal model adapter;
 - annotation preview renderer;
@@ -73,7 +80,7 @@ Do not expand to all subjects, listening, handwriting, complex drawing, QR extra
 
 ## Next development plan
 
-### Step 1 — Freeze the contract
+### Step 1 — Freeze the contract (in progress: box, question, and answer models done)
 
 Define Pydantic models and enums before adding model calls:
 
@@ -88,7 +95,7 @@ Define Pydantic models and enums before adding model calls:
 
 Deliverable: contract models plus invalid/valid fixture tests.
 
-### Step 2 — Build deterministic validators
+### Step 2 — Build deterministic validators (in progress: bounds, hierarchy, and answer-binding checks done)
 
 Implement checks for:
 

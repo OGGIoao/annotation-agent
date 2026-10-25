@@ -42,7 +42,7 @@ class Closedness(StrEnum):
 
 
 class BoundingBox(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     page_id: str = Field(min_length=1)
     x1: float = Field(ge=0)
